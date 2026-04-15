@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Planning de révision — 15 avril au 11 juin 2026">
+  <title>Planning Révision</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📅</text></svg>">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23FFF'/><text y='.9em' font-size='90'>📅</text></svg>">
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+
+    <!-- Dynamic Island (Timer) -->
+    <div class="dynamic-island" id="island">
+      <div class="island__content">
+        <span class="island__icon">⏱️</span>
+        <span class="island__time" id="island-time">25:00</span>
+      </div>
+      <button class="island__close" id="island-close">✕</button>
+    </div>
+
+    <header class="header">
+      <h1 class="header__title">Planning Révision</h1>
+      <p class="header__sub">15 avril → 11 juin 2026</p>
+      <div class="countdown badge" id="countdown">Calcul du temps...</div>
+    </header>
+
+    <!-- Tabs -->
+    <div class="seg-wrap">
+      <div class="seg">
+        <button class="seg__btn active" id="t-plan" data-tab="planning">📅 Planning</button>
+        <button class="seg__btn" id="t-suivi" data-tab="suivi">📊 Suivi</button>
+        <button class="seg__btn" id="t-graph" data-tab="graph">📈 Stats</button>
+      </div>
+    </div>
+
+    <!-- ── PLANNING ── -->
+    <div class="planning" id="sec-planning">
+      <nav class="week-nav">
+        <button class="week-nav__btn" id="prev">◀</button>
+        <div class="week-nav__center">
+          <div class="week-nav__label" id="wk-label"></div>
+          <div class="week-nav__meta">
+            <span class="badge badge--light" id="wk-badge"></span>
+            <span id="wk-counter"></span>
+          </div>
+        </div>
+        <button class="week-nav__btn" id="next">▶</button>
+      </nav>
+
+      <div class="progress-dots" id="dots"></div>
+      <div class="stats" id="stats"></div>
+      <section class="grid" id="grid"></section>
+
+      <div class="actions-row">
+        <button class="btn btn--g btn--sm" id="reset">🔄 Réinitialiser</button>
+        <button class="btn btn--w btn--sm" id="export-img">📸 Sauvegarder Image</button>
+      </div>
+
+      <section class="rules">
+        <h2 class="rules__title">Règles & Ajustements</h2>
+        <div class="rules__grid" id="rules"></div>
+      </section>
+    </div>
+
+    <!-- ── SUIVI ── -->
+    <div class="suivi" id="sec-suivi">
+      <div class="suivi__section" id="suivi-done"></div>
+      <div class="suivi__section" id="suivi-skip"></div>
+    </div>
+
+    <!-- ── GRAPHIQUES ── -->
+    <div class="graph-sec" id="sec-graph" style="display:none;"></div>
+
+    <footer class="footer">
+      <p class="footer__text">Planning Révision · 2026</p>
+    </footer>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-bg" id="mbg"></div>
+  <div class="modal glass" id="modal" role="dialog">
+    <div class="modal__head">
+      <h3 class="modal__title" id="m-title">Nouveau créneau</h3>
+      <button class="modal__x" id="m-x">✕</button>
+    </div>
+    <div class="modal__body">
+      <div class="fg">
+        <label class="fl" for="m-subj">Matière</label>
+        <select class="fs" id="m-subj">
+          <option value="francais">📚 Français</option>
+          <option value="maths">🔢 Maths</option>
+          <option value="physique">🔬 Physique-Chimie</option>
+          <option value="svt">🧬 SVT</option>
+          <option value="sport">🏋️ Sport</option>
+          <option value="devoirs">📝 Devoirs supp.</option>
+          <option value="autre">✏️ Autre</option>
+        </select>
+      </div>
+      <div class="fg">
+        <label class="fl" for="m-desc">Description</label>
+        <input type="text" class="fi" id="m-desc" placeholder="Ex : Réviser dissertation…">
+      </div>
+      <div class="frow">
+        <div class="fg">
+          <label class="fl" for="m-start">Début</label>
+          <input type="time" class="fi" id="m-start" value="10:00">
+        </div>
+        <div class="fg">
+          <label class="fl" for="m-end">Fin</label>
+          <input type="time" class="fi" id="m-end" value="11:30">
+        </div>
+      </div>
+      <div class="fdur" id="m-dur">Durée : <span>1h30</span></div>
+    </div>
+    <div class="modal__foot">
+      <button class="btn btn--r btn--sm" id="m-del" style="display:none">Supprimer</button>
+      <div class="btn__spacer"></div>
+      <button class="btn btn--g btn--sm" id="m-cancel">Annuler</button>
+      <button class="btn btn--w btn--sm" id="m-save">Enregistrer</button>
+    </div>
+  </div>
+
+  <div class="toast glass" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
