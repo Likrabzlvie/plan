@@ -223,6 +223,7 @@ function renderGrid(){
         const checkSkipClass=isSkip?' active':'';
         const slotClass=isDone?' is-done':isSkip?' is-skipped':'';
         const rBadge=sl.rescheduled?'<span class="slot__reschedule">rattrapage</span>':'';
+        const dMins = Math.max(0, t2m(sl.endTime) - t2m(sl.startTime));
         return `<div class="slot${slotClass}">
           <button class="slot__btn slot__btn--done${checkDoneClass}" data-w="${ci}" data-d="${k}" data-s="${si}" data-a="done">✔️</button>
           <div class="slot__icon">${sb.i}</div>
@@ -234,7 +235,7 @@ function renderGrid(){
           <div class="slot__dur">${dur}</div>
           <div class="slot__actions">
             <button class="slot__btn slot__btn--skip${checkSkipClass}" data-w="${ci}" data-d="${k}" data-s="${si}" data-a="skip">❌</button>
-            <button class="slot__act play" data-d="${k}" data-s="${si}" data-a="play">▶</button>
+            <button class="slot__act play" data-d="${k}" data-s="${si}" data-a="play" data-mins="${dMins}">▶</button>
             <button class="slot__act" data-d="${k}" data-s="${si}" data-a="edit">✏️</button>
             <button class="slot__act del" data-d="${k}" data-s="${si}" data-a="del">🗑️</button>
           </div>
@@ -268,7 +269,7 @@ function renderGrid(){
   grid.querySelectorAll('.slot__act').forEach(b=>b.addEventListener('click',e=>{
     e.stopPropagation();
     if(b.dataset.a==='edit') openEdit(ci,b.dataset.d,+b.dataset.s);
-    else if(b.dataset.a==='play') startTimer(25);
+    else if(b.dataset.a==='play') startTimer(parseInt(b.dataset.mins) || 25);
     else delSlot(ci,b.dataset.d,+b.dataset.s);
   }));
   grid.querySelectorAll('.card__add').forEach(b=>b.addEventListener('click',()=>openAdd(ci,b.dataset.d)));
@@ -303,8 +304,9 @@ function fireConfetti() {
     conf.style.background = colors[Math.floor(Math.random()*colors.length)];
     conf.style.animationDuration = (Math.random() * 2 + 2) + 's';
     conf.style.animationDelay = (Math.random() * 0.5) + 's';
-    const s = Math.random() * 0.8 + 0.4;
-    conf.style.transform = `scale(${s})`;
+    const s = Math.random() * 8 + 6;
+    conf.style.width = s + 'px';
+    conf.style.height = (s * 1.5) + 'px';
     document.body.appendChild(conf);
     setTimeout(() => conf.remove(), 4000);
   }
